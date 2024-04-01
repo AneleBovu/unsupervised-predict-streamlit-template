@@ -27,13 +27,25 @@
 """
 # Streamlit dependencies
 import streamlit as st
+from streamlit_option_menu import option_menu
+from PIL import Image
 
 # Data handling dependencies
 import pandas as pd
 import numpy as np
-import csv
-from sklearn.metrics.pairwise import cosine_similarity
-from sklearn.feature_extraction.text import CountVectorizer
+import requests
+import base64
+import re
+
+
+#poster
+def fetch_poster(movie_id):
+     url = "https://api.themoviedb.org/3/movie/{}?api_key=c7ec19ffdd3279641fb606d19ceb9bb1&language=en-US".format(movie_id)
+     data=requests.get(url)
+     data=data.json()
+     poster_path = data['poster_path']
+     full_path = "https://image.tmdb.org/t/p/w500/"+poster_path
+     return full_path
 
 # Custom Libraries
 import sys
@@ -46,73 +58,47 @@ from recommenders.content_based import content_model
 title_list = load_movie_titles('resources/data/movies.csv')
 movies_df =  pd.read_csv('resources/data/movies.csv', index_col='movieId')
 movies = movies_df.dropna()
-#content-based filter
-def data_preprocessing(subset_size):
-    """Prepare data for use within Content filtering algorithm.
-    Pandas Dataframe
-        Subset of movies selected for content-based filtering.
 
-    """
-    # Split genre data into individual words.
-    movies['keyWords'] = movies['genres'].str.replace('|', ' ')
-    # Subset of the data
-    movies_subset = movies[:subset_size]
-    return movies_subset
- 
-def content_model(movie_list,top_n=10): 
-    """Performs Content filtering based upon a list of movies supplied
-       by the app user.
-    """
-    # Initializing the empty list of recommended movies
-    data = data_preprocessing(2000)
-    # Instantiating and generating the count matrix
-    count_vec = CountVectorizer()
-    count_matrix = count_vec.fit_transform(data['keyWords'])
-    indices = pd.Series(data['title'])
-    cosine_sim = cosine_similarity(count_matrix, count_matrix)
-    cosine_sim = pd.DataFrame(cosine_sim, index = data.index, columns = data.index)
-    # Getting the index of the movie that matches the title
-    idx_1 = indices[indices == movie_list[0]].index[0]
-    idx_2 = indices[indices == movie_list[1]].index[0]
-    idx_3 = indices[indices == movie_list[2]].index[0]
-    # Creating a Series with the similarity scores in descending order
-    rank_1 = cosine_sim[idx_1]
-    rank_2 = cosine_sim[idx_2]
-    rank_3 = cosine_sim[idx_3]
-    # Calculating the scores
-    score_series_1 = pd.Series(rank_1).sort_values(ascending = False)
-    score_series_2 = pd.Series(rank_2).sort_values(ascending = False)
-    score_series_3 = pd.Series(rank_3).sort_values(ascending = False)
-    # Getting the indexes of the 10 most similar movies
-    listings = pd.concat([score_series_1, score_series_2, score_series_3]).sort_values(ascending=False)
-    # Store movie names
-    recommended_movies = []
-    # Appending the names of movies
-    top_50_indexes = list(listings.iloc[1:50].index)
-    # Removing chosen movies
-    top_indexes = np.setdiff1d(top_50_indexes,[idx_1,idx_2,idx_3])
-    for i in top_indexes[:top_n]:
-        recommended_movies.append(list(movies['title'])[i])
-    return recommended_movies
+def add_bg_from_local(image_file):
+    with open(image_file, "rb") as image_file:
+        encoded_string = base64.b64encode(image_file.read())
+    st.markdown(
+    f"""
+    <style>
+    .stApp {{
+        background-image: url(data:image/{"avif"};base64,{encoded_string.decode()});
+        background-size: cover
+    }}
+    </style>
+    """,
+    unsafe_allow_html=True
+    )
+add_bg_from_local('resources/em.avif')  
 
-
-# App declaration
 def main():
 
-    # DO NOT REMOVE the 'Recommender System' option below, however,
-    # you are welcome to add more options to enrich your app.
-    page_options = ["Recommender System","Solution Overview"]
-
+    selected = option_menu(
+        menu_title=None,  # required
+        options=["Recommender System", "Projects", "Solution Overview"],  # required
+        icons=["bag-check", "book", "envelope"],  # optional
+        menu_icon="cast",  # optional
+        default_index=0,  # optional
+        orientation="horizontal",
+    )
+    
     # -------------------------------------------------------------------
     # ----------- !! THIS CODE MUST NOT BE ALTERED !! -------------------
     # -------------------------------------------------------------------
-    page_selection = st.sidebar.selectbox("Choose Option", page_options)
-    if page_selection == "Recommender System":
+    
+    if selected == "Recommender System":
         # Header contents
-        st.write('# Movie Recommender Engine')
-        st.write('### EXPLORE Data Science Academy Unsupervised Predict')
-        st.image('resources/imgs/Image_header.png',use_column_width=True)
-        # Recommender System algorithm selection
+        st.image("resources/imgs/engine.jpg", width=700)
+        
+        columns = st.columns(len([299536, 429422, 240, 155, 572154]))
+        for i, movie_id in enumerate([299536, 429422, 240, 155, 572154]):
+            poster_url = fetch_poster(movie_id)
+            columns[i].image(poster_url, width=150)
+            # Recommender System algorithm selection
         sys = st.radio("Select an algorithm",
                        ('Content Based Filtering',
                         'Collaborative Based Filtering'))
@@ -129,8 +115,7 @@ def main():
             if st.button("Recommend"):
                 try:
                     with st.spinner('Crunching the numbers...'):
-                        movie_list = fav_movies
-                        top_recommendations = content_model(movie_list,
+                        top_recommendations = content_model(movie_list=fav_movies,
                                                             top_n=10)
                     st.title("We think you'll like:")
                     for i,j in enumerate(top_recommendations):
@@ -152,15 +137,27 @@ def main():
                 except:
                     st.error("Oops! Looks like this algorithm does't work.\
                               We'll need to fix it!")
+                    
+    if selected == "Projects":
+        pass
 
 
     # -------------------------------------------------------------------
 
     # ------------- SAFE FOR ALTERING/EXTENSION -------------------
-    if page_selection == "Solution Overview":
+    if selected == "Solution Overview":
         st.title("Solution Overview")
         st.write("Describe your winning approach on this page")
 
+        st.title("MovieLens Content Viewer")
+
+        # Embedding the URL in an iframe
+        st.write("Here's the content from the URL:")
+        st.write(
+        f'<iframe src="https://movielens.org/movies/3"></iframe>',
+        unsafe_allow_html=True,
+    )
+       
     # You may want to add more sections here for aspects such as an EDA,
     # or to provide your business pitch.
 
