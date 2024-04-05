@@ -150,7 +150,37 @@ def main():
             "title": "Data Scientist",
             "description": "Sibusiso analyzes data and creates insights to improve the performance of InfoSmart's recommendation system."
         },
-       
+        {
+            "name": "Onneile",
+            "image_path": "resources/imgs/onneile.jpg",
+            "title": "Software Engineer",
+            "description": "Onneile is responsible for developing and maintaining the software infrastructure of InfoSmart's recommendation system."
+        },
+        {
+            "name": "Felicia",
+            "image_path": "resources/imgs/felicia.jpg",
+            "title": "UI/UX Designer",
+            "description": "Felicia designs intuitive and visually appealing user interfaces for InfoSmart's recommendation system."
+        },
+        {
+            "name": "Anele",
+            "image_path": "resources/imgs/anele.jpg",
+            "title": "Product Manager",
+            "description": "Anele oversees the development and implementation of new features for InfoSmart's recommendation system."
+        },
+        {
+            "name": "Amukelani",
+            "image_path": "resources/imgs/amukelani.jpg",
+            "title": "Quality Assurance Engineer",
+            "description": "Amukelani ensures the quality and reliability of InfoSmart's recommendation system through rigorous testing."
+        }
+    ]
+
+    # Display team members
+    for member in team_members:
+        image_path = os.path.join(os.getcwd(), member["image_path"])
+        display_team_member(image_path, member["name"], member["title"], member["description"])
+
 
 
         
