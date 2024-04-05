@@ -136,6 +136,23 @@ def main():
         
 
 
+        # Team members data
+    team_members = [
+        {
+            "name": "Kamogelo",
+            "image_path": "resources/imgs/kamo.jpg",
+            "title": "Machine Learning Engineer",
+            "description": "Kamogelo specializes in developing machine learning algorithms for InfoSmart's recommendation system."
+        },
+        {
+            "name": "Sibusiso",
+            "image_path": "resources/imgs/sbu.jpg",
+            "title": "Data Scientist",
+            "description": "Sibusiso analyzes data and creates insights to improve the performance of InfoSmart's recommendation system."
+        },
+       
+
+
         
                    
         
