@@ -181,10 +181,6 @@ def main():
         image_path = os.path.join(os.getcwd(), member["image_path"])
         display_team_member(image_path, member["name"], member["title"], member["description"])
 
-
-
-        
-                   
         
                       
                       
