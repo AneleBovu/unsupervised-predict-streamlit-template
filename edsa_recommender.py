@@ -36,6 +36,7 @@ import numpy as np
 import requests
 import base64
 import re
+import os
 
 
 #poster
@@ -48,8 +49,6 @@ def fetch_poster(movie_id):
      return full_path
 
 # Custom Libraries
-import sys
-sys.path.append(r'C:\Users\Kamogelo\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.12_qbz5n2kfra8p0\LocalCache\local-packages\Python312\Scripts\surprise.exe')
 from utils.data_loader import load_movie_titles
 from recommenders.collaborative_based import collab_model
 from recommenders.content_based import content_model
@@ -75,15 +74,22 @@ def add_bg_from_local(image_file):
     )
 add_bg_from_local('resources/em.avif')  
 
+def display_team_member(image_path, name, title, description):
+    st.image(image_path, width=150, caption=name, use_column_width='auto', output_format='JPG')
+    st.markdown(f"{title}")
+    st.write(description)
+    st.write("")
+
 def main():
 
     selected = option_menu(
         menu_title=None,  # required
-        options=["Recommender System", "Projects", "Solution Overview"],  # required
+        options=["Recommender System", "Projects", "Solution Overview", "About Us"],  # required
         icons=["bag-check", "book", "envelope"],  # optional
         menu_icon="cast",  # optional
         default_index=0,  # optional
         orientation="horizontal",
+
     )
     
     # -------------------------------------------------------------------
@@ -160,6 +166,71 @@ def main():
        
     # You may want to add more sections here for aspects such as an EDA,
     # or to provide your business pitch.
+    
+
+    if selected == "About Us":
+
+        st.title('Welcome to InfoSmart')
+
+        st.subheader('About Us')
+
+        company_description = """
+        **At InfoSmart, we're on a mission to revolutionize the way you discover and enjoy movies. Founded on the principles of innovation and personalization, we're dedicated to providing you with an unparalleled cinematic experience tailored to your unique tastes.**
+
+        **Driven by a team of passionate experts in collaborative and content-based filtering methods, we leverage cutting-edge algorithms to predict your preferences with unmatched accuracy. Whether you're a cinephile searching for hidden gems or a casual moviegoer in need of recommendations, InfoSmart is here to elevate your movie-watching journey.**
+        """
+        st.markdown(company_description)
+
+        # Team members data
+        team_members = [
+            {
+                "name": "Kamogelo",
+                "image_path": "resources/imgs/kamo.jpg",
+                "title": "Machine Learning Engineer",
+                "description": "Kamogelo specializes in developing machine learning algorithms for InfoSmart's recommendation system."
+            },
+            {
+                "name": "Sibusiso",
+                "image_path": "resources/imgs/sbu.jpg",
+                "title": "Data Scientist",
+                "description": "Sibusiso analyzes data and creates insights to improve the performance of InfoSmart's recommendation system."
+            },
+            {
+                "name": "Onneile",
+                "image_path": "resources/imgs/onneile.jpg",
+                "title": "Software Engineer",
+                "description": "Onneile is responsible for developing and maintaining the software infrastructure of InfoSmart's recommendation system."
+            },
+            {
+                "name": "Felicia",
+                "image_path": "resources/imgs/felicia.jpg",
+                "title": "UI/UX Designer",
+                "description": "Felicia designs intuitive and visually appealing user interfaces for InfoSmart's recommendation system."
+            },
+            {
+                "name": "Anele",
+                "image_path": "resources/imgs/anele.jpg",
+                "title": "Product Manager",
+                "description": "Anele oversees the development and implementation of new features for InfoSmart's recommendation system."
+            },
+            {
+                "name": "Amukelani",
+                "image_path": "resources/imgs/amukelani.jpg",
+                "title": "Quality Assurance Engineer",
+                "description": "Amukelani ensures the quality and reliability of InfoSmart's recommendation system through rigorous testing."
+            }
+        ]
+
+        # Display team members
+    for member in team_members:
+        image_path = os.path.join(os.getcwd(), member["image_path"])
+        st.markdown(f"**{member['name']}**")
+        st.image(image_path, use_column_width=True, output_format='JPEG', width=200, clamp=True)
+        st.markdown(f"**{member['title']}**")
+        st.markdown(member['description'])
+
+    
+
 
 
 if __name__ == '__main__':
