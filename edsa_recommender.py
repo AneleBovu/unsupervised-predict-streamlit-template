@@ -122,6 +122,19 @@ def main():
         st.subheader('About Us')
         
         
+        company_description = """
+    At InfoSmart, we're on a mission to revolutionize the way you discover and enjoy movies. Founded on the principles of innovation and personalization, we're dedicated to providing you with an unparalleled cinematic experience tailored to your unique tastes.
+
+    Driven by a team of passionate experts in collaborative and content-based filtering methods, we leverage cutting-edge algorithms to predict your preferences with unmatched accuracy. Whether you're a cinephile searching for hidden gems or a casual moviegoer in need of recommendations, InfoSmart is here to elevate your movie-watching journey.
+
+    
+    """
+        st.markdown(company_description)
+
+
+
+        
+
 
         
                    
