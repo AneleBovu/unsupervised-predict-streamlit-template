@@ -31,6 +31,7 @@ import streamlit as st
 # Data handling dependencies
 import pandas as pd
 import numpy as np
+import os
 
 # Custom Libraries
 from utils.data_loader import load_movie_titles
@@ -39,6 +40,12 @@ from recommenders.content_based import content_model
 
 # Data Loading
 title_list = load_movie_titles('resources/data/movies.csv')
+
+def display_team_member(image_path, name, title, description):
+    st.image(image_path, width=150, caption=name, use_column_width='auto', output_format='PNG')
+    st.markdown(f"**{title}**")
+    st.write(description)
+    st.write("")
 
 # App declaration
 def main():
@@ -106,6 +113,21 @@ def main():
 
     # You may want to add more sections here for aspects such as an EDA,
     # or to provide your business pitch.
+        
+        
+    if page_selection == "About Us":
+
+        st.title('Welcome to InfoSmart')
+
+        st.subheader('About Us')
+        
+        
+
+        
+                   
+        
+                      
+                      
 
 
 if __name__ == '__main__':
