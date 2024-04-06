@@ -132,12 +132,12 @@ def collab_model(movie_list, top_n=10):
 
     # Getting the cosine similarity matrix
     cosine_sim = cosine_similarity(df_init_users.drop(columns=['userId']), df_init_users.drop(columns=['userId']))
-    
+    print("cosine=",cosine_sim.shape)
     # Retrieving indices of movies from the provided list
     idx_1 = indices[indices == movie_list[0]].index[0]
     idx_2 = indices[indices == movie_list[1]].index[0]
     idx_3 = indices[indices == movie_list[2]].index[0]
-    
+    print("idx_2=",idx_2)
     # Creating a Series with the similarity scores in descending order
     rank_1 = cosine_sim[idx_1]
     rank_2 = cosine_sim[idx_2]

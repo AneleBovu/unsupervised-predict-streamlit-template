@@ -28,7 +28,6 @@
 # Streamlit dependencies
 import streamlit as st
 from streamlit_option_menu import option_menu
-from PIL import Image
 
 # Data handling dependencies
 import pandas as pd
@@ -37,27 +36,70 @@ import requests
 import base64
 import re
 
-
-#poster
-def fetch_poster(movie_id):
-     url = "https://api.themoviedb.org/3/movie/{}?api_key=c7ec19ffdd3279641fb606d19ceb9bb1&language=en-US".format(movie_id)
-     data=requests.get(url)
-     data=data.json()
-     poster_path = data['poster_path']
-     full_path = "https://image.tmdb.org/t/p/w500/"+poster_path
-     return full_path
-
 # Custom Libraries
-import sys
-sys.path.append(r'C:\Users\Kamogelo\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.12_qbz5n2kfra8p0\LocalCache\local-packages\Python312\Scripts\surprise.exe')
+
 from utils.data_loader import load_movie_titles
 from recommenders.collaborative_based import collab_model
 from recommenders.content_based import content_model
 
+#libraries
+import googleapiclient.discovery
+
 # Data Loading
+df_links = pd.read_csv('resources/data/links.csv')
 title_list = load_movie_titles('resources/data/movies.csv')
 movies_df =  pd.read_csv('resources/data/movies.csv', index_col='movieId')
 movies = movies_df.dropna()
+
+#trailer
+def get_movie_trailer(movie_name):
+    # Set up YouTube Data API client
+    api_service_name = "youtube"
+    api_version = "v3"
+    api_key = "AIzaSyCxeFJnqlUpLw8vRA1jXLbq-a9FHhsOMi0"  # Replace with your own API key
+    youtube = googleapiclient.discovery.build(api_service_name, api_version, developerKey=api_key)
+
+    # Search for movie trailers
+    request = youtube.search().list(
+        q=movie_name + " trailer",
+        part="snippet",
+        maxResults=1,
+        type="video"
+    )
+    response = request.execute()
+
+    # Extract trailer video ID
+    if 'items' in response:
+        items = response['items']
+        if items:
+            trailer_id = items[0]['id']['videoId']
+            trailer_url = f"https://www.youtube.com/watch?v={trailer_id}"
+            return trailer_url
+        else:
+            return "No trailer found."
+    else:
+        return "Error fetching data."
+
+#poster
+def fetch_poster(movie_id):
+    url = "https://api.themoviedb.org/3/movie/{}?api_key=c7ec19ffdd3279641fb606d19ceb9bb1&language=en-US".format(movie_id)
+    data=requests.get(url)
+    data=data.json()
+    poster_path = data['poster_path']
+    full_path = "https://image.tmdb.org/t/p/w500/"+poster_path
+    return full_path
+#data
+df_links.dropna(subset=['tmdbId'], inplace=True)
+df_links['tmdbId'] = df_links['tmdbId'].astype(int)
+movie_df = pd.merge(movies_df, df_links, on='movieId', how='inner')
+
+#Get ID
+def get_movie_id(movie_title):
+    movie_id = movie_df.loc[movie_df['title'] == movie_title, 'tmdbId'].values
+    if len(movie_id) > 0:
+        return movie_id[0]
+    else:
+        return "Movie not found"
 
 def add_bg_from_local(image_file):
     with open(image_file, "rb") as image_file:
@@ -79,10 +121,10 @@ def main():
 
     selected = option_menu(
         menu_title=None,  # required
-        options=["Recommender System", "Projects", "Solution Overview"],  # required
-        icons=["bag-check", "book", "envelope"],  # optional
-        menu_icon="cast",  # optional
-        default_index=0,  # optional
+        options=["Recom-Engine", "Trailer", "Solution Overview"],  # required
+        icons=["rewind-btn", "badge-hd", "easel"],  
+        menu_icon="cast",  
+        default_index=0, 
         orientation="horizontal",
     )
     
@@ -90,7 +132,7 @@ def main():
     # ----------- !! THIS CODE MUST NOT BE ALTERED !! -------------------
     # -------------------------------------------------------------------
     
-    if selected == "Recommender System":
+    if selected == "Recom-Engine":
         # Header contents
         st.image("resources/imgs/engine.jpg", width=700)
         
@@ -108,8 +150,8 @@ def main():
         movie_1 = st.selectbox('Fisrt Option',title_list[14930:15200])
         movie_2 = st.selectbox('Second Option',title_list[25055:25255])
         movie_3 = st.selectbox('Third Option',title_list[21100:21200])
-        fav_movies = [movie_1,movie_2,movie_3]
-
+        fav_movies = [ movie_1 , movie_2, movie_3]
+        
         # Perform top-10 movie recommendation generation
         if sys == 'Content Based Filtering':
             if st.button("Recommend"):
@@ -119,7 +161,7 @@ def main():
                                                             top_n=10)
                     st.title("We think you'll like:")
                     for i,j in enumerate(top_recommendations):
-                        st.subheader(str(i+1)+'. '+j)
+                        st.subheader(str(i+1)+'. '+(j))
                 except:
                     st.error("Oops! Looks like this algorithm does't work.\
                               We'll need to fix it!")
@@ -138,10 +180,20 @@ def main():
                     st.error("Oops! Looks like this algorithm does't work.\
                               We'll need to fix it!")
                     
-    if selected == "Projects":
-        pass
-
-
+    if selected == "Trailer":
+        for movie_name in top_recommendations:
+            movie_id = get_movie_id(movie_name)
+            if movie_id != "Movie not found":
+                trailer_url = get_movie_trailer(movie_name)
+                image_url = fetch_poster(movie_id)
+                st.image(image_url, width=200)
+                st.write(f"#### Movie: {movie_name}")
+                st.write(f"#### Trailer URL: {trailer_url}")
+                st.markdown("---")
+            else:
+                st.write(f"Movie: {movie_name}")
+                st.write("Movie not found")
+                st.markdown("---")
     # -------------------------------------------------------------------
 
     # ------------- SAFE FOR ALTERING/EXTENSION -------------------
@@ -149,15 +201,6 @@ def main():
         st.title("Solution Overview")
         st.write("Describe your winning approach on this page")
 
-        st.title("MovieLens Content Viewer")
-
-        # Embedding the URL in an iframe
-        st.write("Here's the content from the URL:")
-        st.write(
-        f'<iframe src="https://movielens.org/movies/3"></iframe>',
-        unsafe_allow_html=True,
-    )
-       
     # You may want to add more sections here for aspects such as an EDA,
     # or to provide your business pitch.
 
