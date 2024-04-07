@@ -181,6 +181,7 @@ def main():
                               We'll need to fix it!")
                     
     if selected == "Trailer":
+        top_recommendations = content_model(movie_list=fav_movies,top_n=10)
         for movie_name in top_recommendations:
             movie_id = get_movie_id(movie_name)
             if movie_id != "Movie not found":
