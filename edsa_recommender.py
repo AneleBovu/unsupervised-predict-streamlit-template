@@ -119,6 +119,10 @@ add_bg_from_local('resources/em.avif')
 
 def main():
 
+    movie_1 = None
+    movie_2 = None
+    movie_3 = None
+
     selected = option_menu(
         menu_title=None,  # required
         options=["Recom-Engine", "Trailer", "Solution Overview"],  # required
@@ -180,22 +184,22 @@ def main():
                     st.error("Oops! Looks like this algorithm does't work.\
                               We'll need to fix it!")
                     
-    if selected == "Trailer":
-        fav_movies = [ movie_1 , movie_2, movie_3]
-        top_recommendations = content_model(movie_list=fav_movies,top_n=10)
-        for movie_name in top_recommendations:
-            movie_id = get_movie_id(movie_name)
-            if movie_id != "Movie not found":
-                trailer_url = get_movie_trailer(movie_name)
-                image_url = fetch_poster(movie_id)
-                st.image(image_url, width=200)
-                st.write(f"#### Movie: {movie_name}")
-                st.write(f"#### Trailer URL: {trailer_url}")
-                st.markdown("---")
-            else:
-                st.write(f"Movie: {movie_name}")
-                st.write("Movie not found")
-                st.markdown("---")
+    elif selected == "Trailer":
+        if movie_1 is not None and movie_2 is not None and movie_3 is not None:
+            top_recommendations = content_model(movie_list=[movie_1, movie_2, movie_3], top_n=10)
+            for movie_name in top_recommendations:
+                movie_id = get_movie_id(movie_name)
+                if movie_id != "Movie not found":
+                    trailer_url = get_movie_trailer(movie_name)
+                    image_url = fetch_poster(movie_id)
+                    st.image(image_url, width=200)
+                    st.write(f"#### Movie: {movie_name}")
+                    st.write(f"#### Trailer URL: {trailer_url}")
+                    st.markdown("---")
+                else:
+                    st.write(f"Movie: {movie_name}")
+                    st.write("Movie not found")
+                    st.markdown("---")
     # -------------------------------------------------------------------
 
     # ------------- SAFE FOR ALTERING/EXTENSION -------------------
