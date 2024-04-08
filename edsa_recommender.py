@@ -118,15 +118,10 @@ def add_bg_from_local(image_file):
 add_bg_from_local('resources/em.avif')  
 
 def main():
-
-    movie_1 = None
-    movie_2 = None
-    movie_3 = None
-
     selected = option_menu(
         menu_title=None,  # required
-        options=["Recom-Engine", "Trailer", "Solution Overview"],  # required
-        icons=["rewind-btn", "badge-hd", "easel"],  
+        options=["Recom-Engine","Solution Overview"],  # required
+        icons=["rewind-btn","easel"],  
         menu_icon="cast",  
         default_index=0, 
         orientation="horizontal",
@@ -157,49 +152,35 @@ def main():
         fav_movies = [ movie_1 , movie_2, movie_3]
         
         # Perform top-10 movie recommendation generation
-        if sys == 'Content Based Filtering':
-            if st.button("Recommend"):
-                try:
-                    with st.spinner('Crunching the numbers...'):
+        if st.button("Recommend"):
+            try:
+                with st.spinner('Crunching the numbers...'):
+                    if sys == 'Content Based Filtering':
                         top_recommendations = content_model(movie_list=fav_movies,
                                                             top_n=10)
-                    st.title("We think you'll like:")
-                    for i,j in enumerate(top_recommendations):
-                        st.subheader(str(i+1)+'. '+(j))
-                except:
-                    st.error("Oops! Looks like this algorithm does't work.\
-                              We'll need to fix it!")
-
-
-        if sys == 'Collaborative Based Filtering':
-            if st.button("Recommend"):
-                try:
-                    with st.spinner('Crunching the numbers...'):
+                    elif sys == 'Collaborative Based Filtering':
                         top_recommendations = collab_model(movie_list=fav_movies,
                                                            top_n=10)
-                    st.title("We think you'll like:")
-                    for i,j in enumerate(top_recommendations):
-                        st.subheader(str(i+1)+'. '+j)
-                except:
-                    st.error("Oops! Looks like this algorithm does't work.\
-                              We'll need to fix it!")
                     
-    elif selected == "Trailer":
-        if movie_1 is not None and movie_2 is not None and movie_3 is not None:
-            top_recommendations = content_model(movie_list=[movie_1, movie_2, movie_3], top_n=10)
-            for movie_name in top_recommendations:
-                movie_id = get_movie_id(movie_name)
-                if movie_id != "Movie not found":
+                # Display recommended movies with posters and trailer links
+                st.title("We think you'll like:")
+                for i, movie_name in enumerate(top_recommendations):
+                    st.subheader(str(i+1) + '. ' + (movie_name))
+                    
+                    # Display movie poster
+                    poster_url = fetch_poster(movie_df.loc[movie_df['title'] == movie_name, 'tmdbId'].values[0])
+                    st.image(poster_url, width=150)
+                    
+                    # Display trailer link
                     trailer_url = get_movie_trailer(movie_name)
-                    image_url = fetch_poster(movie_id)
-                    st.image(image_url, width=200)
-                    st.write(f"#### Movie: {movie_name}")
-                    st.write(f"#### Trailer URL: {trailer_url}")
-                    st.markdown("---")
-                else:
-                    st.write(f"Movie: {movie_name}")
-                    st.write("Movie not found")
-                    st.markdown("---")
+                    if trailer_url != "No trailer found.":
+                        st.write(f"Trailer URL: [{movie_name} Trailer]({trailer_url})")
+                    else:
+                        st.write("Trailer not available.")
+            
+            except:
+                st.error("Oops! Looks like this algorithm doesn't work. We'll need to fix it!")
+                    
     # -------------------------------------------------------------------
 
     # ------------- SAFE FOR ALTERING/EXTENSION -------------------
