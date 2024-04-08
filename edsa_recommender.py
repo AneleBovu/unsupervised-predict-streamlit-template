@@ -28,13 +28,12 @@
 # Streamlit dependencies
 import streamlit as st
 from streamlit_option_menu import option_menu
+import time
 
 # Data handling dependencies
 import pandas as pd
-import numpy as np
 import requests
 import base64
-import re
 
 # Custom Libraries
 
@@ -50,6 +49,11 @@ df_links = pd.read_csv('resources/data/links.csv')
 title_list = load_movie_titles('resources/data/movies.csv')
 movies_df =  pd.read_csv('resources/data/movies.csv', index_col='movieId')
 movies = movies_df.dropna()
+
+#Loading page
+with st.spinner('# CineSage Loading...'):
+    # Simulate a long computation
+    time.sleep(5) 
 
 #trailer
 def get_movie_trailer(movie_name):
