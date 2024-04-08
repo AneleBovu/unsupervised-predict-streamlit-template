@@ -162,10 +162,27 @@ def main():
         st.write(
         f'<iframe src="https://movielens.org/movies/3"></iframe>',
         unsafe_allow_html=True,
+
+        
     )
+        
+        st.title("Recommender System Used")
+        
+        rating_image = "resources/imgs/ratings2.jpg"
+        st.image(rating_image, caption='Stars', use_column_width=True)
+
+
+        st.info('• Collaborative Filtering: Think of collaborative filtering as a method that taps into the collective wisdom of users. It works by analyzing the preferences and behaviors of many users to make recommendations. Essentially, it looks at patterns in how users interact with movies and finds similarities between users who liked similar movies in the past. Then, it suggests movies that similar users enjoyed but haven’t been watched by the current user yet. It’s like when your friends recommend movies to you because they know your tastes and what you’ve enjoyed in the past. Collaborative filtering is great for discovering new movies based on what other users with similar tastes have enjoyed.')
+        st.info('• Content-Based Filtering: Content-based filtering, on the other hand, focuses on the characteristics of the movies themselves. It looks at the attributes of each movie, such as genre, actors, director, plot keywords, and more. Then, it matches these attributes with the user’s preferences. For example, if a user has previously enjoyed action movies starring a specific actor, the content-based filtering system will recommend similar action movies featuring that actor. Its like having a personal movie critic who knows your favorite genres, actors, and themes and suggests movies that fit your tastes based on those preferences.')
+
+
+        st.title('Resources')
+        st.subheader('MovieLens')
+        st.info('Imagine a vast collection of movie ratings, each adorned with five stars by fellow movie enthusiasts just like you. That\'s precisely what our MovieLens dataset offers—a rich tapestry of cinematic opinions that powers our recommendation system within our App, CineSage. Enhanced with additional data and meticulously resampled for fairness, this dataset serves as the cornerstone of our quest to provide you with the most accurate and personalized movie recommendations possible. So, rest assured, your movie journey with CineSage is backed by the collective wisdom of millions of fellow movie lovers.')
        
     # You may want to add more sections here for aspects such as an EDA,
     # or to provide your business pitch.
+    
     
 
     if selected == "About Us":
@@ -181,6 +198,7 @@ def main():
         """
         st.markdown(company_description)
 
+            
         # Team members data
         team_members = [
             {
@@ -222,16 +240,28 @@ def main():
         ]
 
         # Display team members
-    for member in team_members:
-        image_path = os.path.join(os.getcwd(), member["image_path"])
-        st.markdown(f"**{member['name']}**")
-        st.image(image_path, use_column_width=True, output_format='JPEG', width=200, clamp=True)
-        st.markdown(f"**{member['title']}**")
-        st.markdown(member['description'])
+        for member in team_members:
+            image_path = os.path.join(os.getcwd(), member["image_path"])
+            st.markdown(f"**{member['name']}**")
+            st.image(image_path, use_column_width=True, output_format='JPEG', width=200, clamp=True)
+            st.markdown(f"**{member['title']}**")
+            st.markdown(member['description'])
 
-    
+        
+        #using this code to allow users to leave a message 
+        st.title("Leave a Message")
 
+        name = st.text_input("Name")
+        number = st.text_input("Number")
+        email = st.text_input("Email")
+        message = st.text_area("Message")
 
+        if st.button("Send Message"):
+            if name and number and email and message:
+                # Here you can add your logic to send the message
+                st.success("Message sent successfully!")
+            else:
+                st.error("Please fill in all the fields.")
 
 if __name__ == '__main__':
     main()
