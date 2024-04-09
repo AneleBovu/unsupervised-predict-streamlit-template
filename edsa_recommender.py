@@ -117,8 +117,8 @@ add_bg_from_local('resources/em.avif')
 def main():
     selected = option_menu(
         menu_title=None,  # required
-        options=["Recom-Engine","Solution Overview"],  # required
-        icons=["rewind-btn","easel"],  
+        options=["Recom-Engine","Solution Overview","About Us"],  # required
+        icons=["bag-heart","easel","stack"],  
         menu_icon="cast",  
         default_index=0, 
         orientation="horizontal",
@@ -184,12 +184,136 @@ def main():
 
     # ------------- SAFE FOR ALTERING/EXTENSION -------------------
     if selected == "Solution Overview":
-        st.title("Solution Overview")
-        st.write("Describe your winning approach on this page")
+        # You may want to add more sections here for aspects such as an EDA,
+        # or to provide your business pitch.
+        st.title("Recommender System Used")
+        
+        rating_image = "resources/imgs/ratings2.jpg"
+        st.image(rating_image, caption='Stars', use_column_width=True)
+
+
+        st.write('• Collaborative Filtering: Think of collaborative filtering as a method that taps into the collective wisdom of users. It works by analyzing the preferences and behaviors of many users to make recommendations. Essentially, it looks at patterns in how users interact with movies and finds similarities between users who liked similar movies in the past. Then, it suggests movies that similar users enjoyed but haven’t been watched by the current user yet. It’s like when your friends recommend movies to you because they know your tastes and what you’ve enjoyed in the past. Collaborative filtering is great for discovering new movies based on what other users with similar tastes have enjoyed.')
+        st.write('• Content-Based Filtering: Content-based filtering, on the other hand, focuses on the characteristics of the movies themselves. It looks at the attributes of each movie, such as genre, actors, director, plot keywords, and more. Then, it matches these attributes with the user’s preferences. For example, if a user has previously enjoyed action movies starring a specific actor, the content-based filtering system will recommend similar action movies featuring that actor. Its like having a personal movie critic who knows your favorite genres, actors, and themes and suggests movies that fit your tastes based on those preferences.')
+        st.markdown(f'''<div style="color:black; font-size:80px;"><p>• <strong>Content-Based Filtering:</strong> Content-based filtering, on the other hand, focuses on the characteristics of the movies themselves. It looks at the attributes of each movie, such as genre, actors, director, plot keywords, and more. Then, it matches these attributes with the user’s preferences. For example, if a user has previously enjoyed action movies starring a specific actor, the content-based filtering system will recommend similar action movies featuring that actor. It's like having a personal movie critic who knows your favorite genres, actors, and themes and suggests movies that fit your tastes based on those preferences.</p></div>''', unsafe_allow_html=True)
+
+        st.title('Resources')
+        data_image = "resources/imgs/overview.jpg"
+        st.image(data_image, caption='Data', use_column_width=True)
+        st.subheader('MovieLens')
+        st.write('Imagine a vast collection of movie ratings, each adorned with five stars by fellow movie enthusiasts just like you. That\'s precisely what our MovieLens dataset offers—a rich tapestry of cinematic opinions that powers our recommendation system within our App, CineSage. Enhanced with additional data and meticulously resampled for fairness, this dataset serves as the cornerstone of our quest to provide you with the most accurate and personalized movie recommendations possible. So, rest assured, your movie journey with CineSage is backed by the collective wisdom of millions of fellow movie lovers.')
+
+        st.subheader('Datasets')
+        st.write('These are the datasets used to build the recommender system:')
+        
+        data_description= """ 
+        The file named "movies.csv" contains information about various movies. Each line within the file represents a single movie.
+        Let's break down what each part of the file means:
+        
+        ♦ movieId: This is a unique identifier for each movie. It helps to distinguish one movie from another. For example, if there are multiple movies with the same title, each will have a different movieId.
+
+        ♦ title: This is the name of the movie. You might see something like "The Lion King (1994)" which tells you the title of the movie and the year it was released in parentheses. Sometimes, there might be errors or inconsistencies in the titles.
+
+        ♦ genres: This part tells you what kind of movie it is. It could be Action, Comedy, Drama, or a mix of different genres. Genres are separated by a vertical bar (|). For example, a movie might be tagged as "Action|Adventure|Sci-Fi", which means it's an action movie with elements of adventure and science fiction.
+
+        Now, let's imagine you want to know about a specific movie. You can look it up in this file using its movieId or title, and you'll find information about what genre it belongs to and when it was released.
+
+        So, in simpler terms, this file is like a big catalog of movies. It tells you their names, unique identifiers, what type of movies they are (like action, comedy, etc.), and sometimes when they were released. It's a handy reference for anyone who loves movies and wants to explore different genres.ovieId: This is a unique identifier for each movie. It helps to distinguish one movie from another. For example, if there are multiple movies with the same title, each will have a different movieId.
+        """
+        
+        st.markdown(data_description)
+        
+        st.write('Imagine you have another file called "train.csv". This file contains information about how users have rated movies. Each line in the file represents one rating given by a user to a movie. Here\'s what each part of the file means:')
+
+        st.write('➢ userId: This is a unique identifier for each user who has rated movies. It helps to distinguish one user from another. For example, if there are multiple users, each will have a different userId.')
+
+        st.write('➢ movieId: This is the unique identifier for each movie that has been rated. It helps to identify which movie the user has rated.')
+
+        st.write('➢ rating: This is the score that the user has given to the movie. Ratings are made on a scale of 0.5 stars to 5 stars, with increments of 0.5 stars. For example, a user might give a movie 4 stars or 3.5 stars.')
+
+        st.write('➢ timestamp: This represents when the rating was made. It’s recorded in seconds since midnight Coordinated Universal Time (UTC) of January 1, 1970. This might not be relevant for every user, but it helps to track when the rating was given.')
+
+        st.write('So, in simpler terms, this file is like a log of how users have rated different movies. It tells you who rated the movie, which movie they rated, what score they gave it, and when they rated it. This information can be used to analyze user preferences, recommend movies, or understand which movies are popular among users.')
 
     # You may want to add more sections here for aspects such as an EDA,
     # or to provide your business pitch.
 
+    if selected == "About Us":
+
+        st.title('Welcome to InfoSmart')
+
+        st.subheader('About Us')
+
+        company_description = """
+        **At InfoSmart, we're on a mission to revolutionize the way you discover and enjoy movies. Founded on the principles of innovation and personalization, we're dedicated to providing you with an unparalleled cinematic experience tailored to your unique tastes.**
+
+        **Driven by a team of passionate experts in collaborative and content-based filtering methods, we leverage cutting-edge algorithms to predict your preferences with unmatched accuracy. Whether you're a cinephile searching for hidden gems or a casual moviegoer in need of recommendations, InfoSmart is here to elevate your movie-watching journey.**
+        """
+        st.markdown(company_description)
+
+            
+        # Team members data
+        team_members = [
+            {
+                "image_path": "resources/imgs/kamo.jpg",
+                "name": "Kamogelo",
+                "title": "Machine Learning Engineer",
+                "description": "Kamogelo specializes in developing machine learning algorithms for InfoSmart's recommendation system."
+            },
+            {
+                "image_path": "resources/imgs/sbu.jpg",
+                "name": "Sibusiso",
+                "title": "Data Scientist",
+                "description": "Sibusiso analyzes data and creates insights to improve the performance of InfoSmart's recommendation system."
+            },
+            {
+                "image_path": "resources/imgs/onneile.jpg",
+                "name": "Onneile",
+                "title": "Software Engineer",
+                "description": "Onneile is responsible for developing and maintaining the software infrastructure of InfoSmart's recommendation system."
+            },
+            {
+                "image_path": "resources/imgs/felicia.jpg",
+                "name": "Felicia",
+                "title": "UI/UX Designer",
+                "description": "Felicia designs intuitive and visually appealing user interfaces for InfoSmart's recommendation system."
+            },
+            {
+                "image_path": "resources/imgs/anele.jpg",
+                "name": "Anele",
+                "title": "Product Manager",
+                "description": "Anele oversees the development and implementation of new features for InfoSmart's recommendation system."
+            },
+            {
+                "image_path": "resources/imgs/amukelani.jpg",
+                "name": "Amukelani",
+                "title": "Quality Assurance Engineer",
+                "description": "Amukelani ensures the quality and reliability of InfoSmart's recommendation system through rigorous testing."
+            }
+        ]
+
+        # Display team members
+        for member in team_members:
+            image_path = os.path.join(os.getcwd(), member["image_path"])
+            st.image(image_path, use_column_width=True, output_format='JPEG', width=200, clamp=True)
+            st.markdown(f"**{member['name']}**")
+            st.markdown(f"**{member['title']}**")
+            st.markdown(member['description'])
+
+        
+        #using this code to allow users to leave a message 
+        st.title("Leave a Message")
+
+        name = st.text_input("Name")
+        number = st.text_input("Number")
+        email = st.text_input("Email")
+        message = st.text_area("Message")
+
+        if st.button("Send Message"):
+            if name and number and email and message:
+                # Here you can add your logic to send the message
+                st.success("Message sent successfully!")
+            else:
+                st.error("Please fill in all the fields.")
 
 if __name__ == '__main__':
     main()
