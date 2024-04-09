@@ -170,9 +170,6 @@ def main():
                     poster_url = fetch_poster(movie_id)
                     st.image(poster_url, width=150)
 
-            except:
-                st.error("Oops! Looks like this algorithm doesn't work. We'll need to fix it!")
-
                 for i, movie_name in enumerate(top_recommendations):
                     st.subheader(str(i+1) + '. ' + movie_name)
 
@@ -183,6 +180,11 @@ def main():
                     else:
                        st.write("Trailer not available.")
                     
+
+            except:
+                st.error("Oops! Looks like this algorithm doesn't work. We'll need to fix it!")
+
+
                     
     # -------------------------------------------------------------------
 
