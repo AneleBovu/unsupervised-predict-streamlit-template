@@ -92,6 +92,7 @@ def fetch_poster(movie_id):
     poster_path = data['poster_path']
     full_path = "https://image.tmdb.org/t/p/w500/"+poster_path
     return full_path
+
 #data
 df_links.dropna(subset=['tmdbId'], inplace=True)
 df_links['tmdbId'] = df_links['tmdbId'].astype(int)
@@ -169,7 +170,7 @@ def main():
                 # Display recommended movies with posters and trailer links
                 st.title("We think you'll like:")
                 for i, movie_name in enumerate(top_recommendations):
-                    st.subheader(str(i+1) + '. ' + (movie_name))
+                    st.subheader(str(i+1) + '. ' + movie_name)
                     
                     # Display movie poster
                     poster_url = fetch_poster(movie_df.loc[movie_df['title'] == movie_name, 'tmdbId'].values[0])
