@@ -164,12 +164,14 @@ def main():
                 st.title("We think you'll like:")
                 for i, movie_name in enumerate(top_recommendations):
                     st.subheader(str(i+1) + '. ' + movie_name)
+
                     # Display trailer link
                     trailer_url = get_movie_trailer(movie_name)
                     if trailer_url != "No trailer found.":
-                        st.write(f"Trailer URL: [{movie_name} Trailer]({trailer_url})")
+                        st.markdown(f"Trailer URL: [{movie_name} Trailer]({trailer_url})")
                     else:
                         st.write("Trailer not available.")
+                    
                     # Display movie poster
                     movie_id = movie_df.loc[movie_df['title'] == movie_name, 'tmdbId'].values[0]
                     poster_url = fetch_poster(movie_id)
