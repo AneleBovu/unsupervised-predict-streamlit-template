@@ -117,7 +117,7 @@ add_bg_from_local('resources/em.avif')
 def main():
     selected = option_menu(
         menu_title=None,  # required
-        options=["Recom-Engine","Solution Overview"],  # required
+        options=["Recom-Engine","Trailer","Solution Overview"],  # required
         icons=["rewind-btn","easel"],  
         menu_icon="cast",  
         default_index=0, 
@@ -169,12 +169,7 @@ def main():
                     poster_url = fetch_poster(movie_id)
                     st.image(poster_url, width=150)
                     
-                    # Display trailer link
-                    #trailer_url = get_movie_trailer(movie_name)
-                    #if trailer_url != "No trailer found.":
-                    #    st.write(f"Trailer URL: [{movie_name} Trailer]({trailer_url})")
-                    #else:
-                    #    st.write("Trailer not available.")
+                   
             
             except:
                 st.error("Oops! Looks like this algorithm doesn't work. We'll need to fix it!")
@@ -185,6 +180,21 @@ def main():
     if selected == "Solution Overview":
         st.title("Solution Overview")
         st.write("Describe your winning approach on this page")
+
+    
+    if selected == "Trailer":
+
+        st.title("We think you'll like:")
+        for i, movie_name in enumerate(top_recommendations):
+            st.subheader(str(i+1) + '. ' + movie_name)
+                    
+
+            #Display trailer link
+            trailer_url = get_movie_trailer(movie_name)
+            if trailer_url != "No trailer found.":
+               st.write(f"Trailer URL: [{movie_name} Trailer]({trailer_url})")
+            else:
+                st.write("Trailer not available.")
 
     # You may want to add more sections here for aspects such as an EDA,
     # or to provide your business pitch.
