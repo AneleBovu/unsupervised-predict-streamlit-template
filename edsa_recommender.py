@@ -34,6 +34,7 @@ import time
 import pandas as pd
 import requests
 import base64
+import os
 
 # Custom Libraries
 
@@ -53,7 +54,7 @@ movies = movies_df.dropna()
 #Loading page
 with st.spinner('# CineSage Loading...'):
     # Simulate a long computation
-    time.sleep(5) 
+    time.sleep(6) 
 
 #trailer
 def get_movie_trailer(movie_name):
