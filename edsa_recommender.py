@@ -173,15 +173,15 @@ def main():
                     st.subheader(str(i+1) + '. ' + movie_name)
                     
                     # Display movie poster
-                    poster_url = fetch_poster(movie_df.loc[movie_df['title'] == movie_name, 'tmdbId'].values[0])
-                    st.image(poster_url, width=150)
+                    #poster_url = fetch_poster(movie_df.loc[movie_df['title'] == movie_name, 'tmdbId'].values[0])
+                    #st.image(poster_url, width=150)
                     
                     # Display trailer link
-                    trailer_url = get_movie_trailer(movie_name)
-                    if trailer_url != "No trailer found.":
-                        st.write(f"Trailer URL: [{movie_name} Trailer]({trailer_url})")
-                    else:
-                        st.write("Trailer not available.")
+                    #trailer_url = get_movie_trailer(movie_name)
+                    #if trailer_url != "No trailer found.":
+                        #st.write(f"Trailer URL: [{movie_name} Trailer]({trailer_url})")
+                    #else:
+                    #    st.write("Trailer not available.")
             
             except:
                 st.error("Oops! Looks like this algorithm doesn't work. We'll need to fix it!")
