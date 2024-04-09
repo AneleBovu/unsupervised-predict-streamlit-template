@@ -161,18 +161,13 @@ def main():
                     
                 # Display recommended movies with posters and trailer links
                 st.title("We think you'll like:")
-                num_columns = 3
                 for i, movie_name in enumerate(top_recommendations):
-                    if i % num_columns == 0:
-                        row = st.beta_container()
+                    st.subheader(str(i+1) + '. ' + movie_name)
                     
-                    with row:
-                        st.subheader(str(i+1) + '. ' + movie_name)
-                    
-                        # Display movie poster
-                        movie_id = movie_df.loc[movie_df['title'] == movie_name, 'tmdbId'].values[0]
-                        poster_url = fetch_poster(movie_id)
-                        st.image(poster_url, width=150)
+                    # Display movie poster
+                    movie_id = movie_df.loc[movie_df['title'] == movie_name, 'tmdbId'].values[0]
+                    poster_url = fetch_poster(movie_id)
+                    st.image(poster_url, width=150)
                     
                     # Display trailer link
                     #if movie_name:
