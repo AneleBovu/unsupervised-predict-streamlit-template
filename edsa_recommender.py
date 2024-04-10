@@ -149,7 +149,7 @@ def main():
                     # Display trailer link
                     movie_imdbId = movie_df.loc[movie_df['title'] == movie_name, 'imdbId'].values[0]
                     trailer_url = create_imdb_link(movie_imdbId)
-                    st.markdown(f"Trailer URL: [{movie_name} Trailer]({trailer_url})")
+                    st.markdown(f"imdbId URL: [{movie_name} imdbId]({trailer_url})")
                     
 
             except:
