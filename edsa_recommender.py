@@ -180,25 +180,32 @@ def main():
 
         st.image("resources/imgs/moviespergenre.png", width=600)
         st.write("➢Furthermore, we can see from the histogram that the most liked genre of movies is drama, followed by comedy, thriller, and others.")
-
-        st.image("resources/imgs/top10users.png", width=600)
-        st.image("resources/imgs/usersvsratingswithoutol.png", width=600)
-        text2="""Firstly, we have a histogram that shows the number of users per rating. From the interpretation of the
+        st.image("resources/imgs/noofusersperrating.png", width=600)
+        text2="""➢Firstly, we have a histogram that shows the number of users per rating. From the interpretation of the
           histogram we can see that the majority of users have ratings of 4.0. We can also see that 26.53 percent of 
           users have a rating of 4.0 followed by 19.6 percent for rating of 3.0 and 14.45 percent for rating of 5.0. 
           This creates an imbalance in our data we will discuss. 
         """
         st.write(text2)
 
+        st.image("resources/imgs/top10users.png", width=600)
+        st.image("resources/imgs/usersvsratingswithoutol.png", width=600)
+        text3="""Secondly, we have the top 10 users by number of ratings. In the histogram above we can see that UserID number 72315 has the majority of ratings. 
+        The gap between the first user and other users can affect the accuracy of algorithms such as KNN clustering because they are sensitive to outliers. 
+        So to reduce outliers we standardize the data to produce the plot below. From the histogram below we can see that we no longer have outliers anymore. 
+        This standardized data is the one we are going to use for our algorithms and models
+        """
+        st.write(text3)
+
         st.image("resources/imgs/noofratingsvsratings.png", width=600)
         st.image("resources/imgs/ratingdistribution.png", width=600)
 
-        text3="""we have plotted the number of ratings vs ratings. We can see that our data follow a normal distribution. 
+        text4="""➢we have plotted the number of ratings vs ratings. We can see that our data follow a normal distribution. 
         This distribution is left skewed because the majority of our data is on the left. 
         This Skewness of data also shifts our mean and median. 
         From the histogram below we can see that we have mean and median of 3.53 and 3.5.
         """
-        st.write(text3)
+        st.write(text4)
 
                 
     # -------------------------------------------------------------------
