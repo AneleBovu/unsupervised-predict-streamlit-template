@@ -143,7 +143,7 @@ def main():
                 # Display recommended movies with posters and trailer links
                 st.title("We think you'll like:")
 
-                text = """If url 1 does not work try url 2"""
+                text = """Try URL 1 or URL 2"""
                 st.info(text)
                 for i, movie_name in enumerate(top_recommendations):
                     st.subheader(str(i+1) + '. ' + movie_name)
