@@ -171,10 +171,11 @@ def main():
                     st.image(poster_url, width=150)
 
                     # Display trailer link
-                    ##if trailer_url != "No trailer found.":
-                       #st.markdown(f"Trailer URL: [{movie_name} Trailer]({trailer_url})")
-                    #else:
-                     #  st.write("Trailer not available.")
+                    trailer_url = get_movie_trailer(movie_name)
+                    if trailer_url != "No trailer found.":
+                       st.markdown(f"Trailer URL: [{movie_name} Trailer]({trailer_url})")
+                    else:
+                      st.write("Trailer not available.")
                     
 
             except:
