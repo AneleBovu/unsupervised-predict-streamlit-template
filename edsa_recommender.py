@@ -57,9 +57,9 @@ with st.spinner('# CineSage Loading...'):
     time.sleep(6) 
 
 #trailer
-def create_imdb_link(movielens):
-    movielens_url = f"https://movielens.org/movies/{movielens}/"
-    return movielens_url
+def create_imdb_link(movie_imdbId):
+    imdb_url = f"https://www.imdb.com/title/tt00{movie_imdbId}/"
+    return imdb_url
 
 #poster
 def fetch_poster(movie_id):
@@ -147,9 +147,9 @@ def main():
                     st.image(poster_url, width=150)
 
                     # Display trailer link
-                    movielens = movie_df.loc[movie_df['title'] == movie_name, 'tmdbId'].values[0]
-                    trailer_url = create_imdb_link(movielens)
-                    st.markdown(f"MovieLens URL: [{movie_name} movielens]({trailer_url})")
+                    movie_imdbId = movie_df.loc[movie_df['title'] == movie_name, 'imdbId'].values[0]
+                    trailer_url = create_imdb_link(movie_imdbId)
+                    st.markdown(f"imdbId URL: [{movie_name} imdbId]({trailer_url})")
                     
 
             except:
