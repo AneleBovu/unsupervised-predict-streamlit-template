@@ -108,8 +108,28 @@ def main():
 
     # ------------- SAFE FOR ALTERING/EXTENSION -------------------
     if page_selection == "Solution Overview":
-        st.title("Solution Overview")
-        st.write("Describe your winning approach on this page")
+        #st.title("Solution Overview")
+        #st.write("Describe your winning approach on this page")
+         
+        
+        st.title("Recommender System Used")
+        
+        rating_image = "resources/imgs/.png"
+        st.image(rating_image, caption='Stars', use_column_width=True)
+
+
+        st.info('• Collaborative Filtering: Think of collaborative filtering as a method that taps into the collective wisdom of users. It works by analyzing the preferences and behaviors of many users to make recommendations. Essentially, it looks at patterns in how users interact with movies and finds similarities between users who liked similar movies in the past. Then, it suggests movies that similar users enjoyed but haven’t been watched by the current user yet. It’s like when your friends recommend movies to you because they know your tastes and what you’ve enjoyed in the past. Collaborative filtering is great for discovering new movies based on what other users with similar tastes have enjoyed.')
+        st.info('• Content-Based Filtering: Content-based filtering, on the other hand, focuses on the characteristics of the movies themselves. It looks at the attributes of each movie, such as genre, actors, director, plot keywords, and more. Then, it matches these attributes with the user’s preferences. For example, if a user has previously enjoyed action movies starring a specific actor, the content-based filtering system will recommend similar action movies featuring that actor. Its like having a personal movie critic who knows your favorite genres, actors, and themes and suggests movies that fit your tastes based on those preferences.')
+
+
+
+
+
+
+
+
+
+
 
     # You may want to add more sections here for aspects such as an EDA,
     # or to provide your business pitch.
@@ -118,6 +138,10 @@ def main():
     if page_selection == "About Us":
 
         st.title('Welcome to InfoSmart')
+        
+        logo_image = "resources/imgs/.png"
+        st.image(logo_image, caption='Logo', use_column_width=True)
+
 
         st.subheader('About Us')
         
@@ -176,13 +200,25 @@ def main():
         }
     ]
 
-    # Display team members
-    for member in team_members:
-        image_path = os.path.join(os.getcwd(), member["image_path"])
-        display_team_member(image_path, member["name"], member["title"], member["description"])
+
 
         
-                      
+
+
+#using this code to allow users to leave a message 
+    st.title("Leave a Message")
+
+    name = st.text_input("Name")
+    number = st.text_input("Number")
+    email = st.text_input("Email")
+    message = st.text_area("Message")
+
+    if st.button("Send Message"):
+        if name and number and email and message:
+            # Here you can add your logic to send the message
+            st.success("Message sent successfully!")
+        else:
+            st.error("Please fill in all the fields.")                      
                       
 
 
