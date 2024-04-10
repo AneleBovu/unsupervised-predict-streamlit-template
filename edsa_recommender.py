@@ -57,10 +57,13 @@ with st.spinner('# CineSage Loading...'):
     time.sleep(6) 
 
 #trailer
-def create_imdb_link(movie_imdbId):
+def create_imdb_link_1(movie_imdbId):
     imdb_url1 = f"https://www.imdb.com/title/tt00{movie_imdbId}/"
+    return imdb_url1
+
+def create_imdb_link_2(movie_imdbId):
     imdb_url2 = f"https://www.imdb.com/title/tt0{movie_imdbId}/"
-    return [imdb_url1, imdb_url2]
+    return imdb_url2
 
 #poster
 def fetch_poster(movie_id):
@@ -139,6 +142,9 @@ def main():
                     
                 # Display recommended movies with posters and trailer links
                 st.title("We think you'll like:")
+
+                text = """If url 1 does not work try url 2"""
+                st.info(text)
                 for i, movie_name in enumerate(top_recommendations):
                     st.subheader(str(i+1) + '. ' + movie_name)
 
@@ -149,8 +155,10 @@ def main():
 
                     # Display trailer link
                     movie_imdbId = movie_df.loc[movie_df['title'] == movie_name, 'imdbId'].values[0]
-                    trailer_url = create_imdb_link(movie_imdbId)
-                    st.markdown(f"imdbId URL: [{movie_name} imdbId]({trailer_url})")
+                    trailer_url1 = create_imdb_link_1(movie_imdbId)
+                    trailer_url2 = create_imdb_link_2(movie_imdbId)
+                    st.markdown(f"imdbId URL 1: [{movie_name} imdbId]({trailer_url1})")
+                    st.markdown(f"imdbId URL 2: [{movie_name} imdbId]({trailer_url2})")
                     
 
             except:
