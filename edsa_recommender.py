@@ -98,8 +98,8 @@ add_bg_from_local('resources/imgs/back.jpg')
 def main():
     selected = option_menu(
         menu_title=None,  # required
-        options=["Recom-Engine","Solution Overview","About Us"],  # required
-        icons=["bag-heart","easel","stack"],  
+        options=["Recom-Engine","EDA","Solution Overview","About Us"],  # required
+        icons=["bag-heart","stack","easel","info-lg"],  
         menu_icon="cast",  
         default_index=0, 
         orientation="horizontal",
@@ -164,6 +164,15 @@ def main():
             except:
                 st.error("Oops! Looks like this algorithm doesn't work. We'll need to fix it!")
 
+    if selected == "EDA":
+
+        st.title("Exploritory Data Analysis")
+        st.image("resources/imgs/moviespergenre.png", width=150)
+
+        st.image("resources/imgs/numberofmovies per director.png", width=150)
+
+        st.image("resources/imgs/numberofmovies per director.png", width=150)
+      
 
                     
     # -------------------------------------------------------------------
@@ -176,7 +185,6 @@ def main():
         
         rating_image = "resources/imgs/ratings2.jpg"
         st.image(rating_image, caption='Stars', use_column_width=True)
-
 
         st.write('• Collaborative Filtering: Think of collaborative filtering as a method that taps into the collective wisdom of users. It works by analyzing the preferences and behaviors of many users to make recommendations. Essentially, it looks at patterns in how users interact with movies and finds similarities between users who liked similar movies in the past. Then, it suggests movies that similar users enjoyed but haven’t been watched by the current user yet. It’s like when your friends recommend movies to you because they know your tastes and what you’ve enjoyed in the past. Collaborative filtering is great for discovering new movies based on what other users with similar tastes have enjoyed.')
         st.write('• Content-Based Filtering: Content-based filtering, on the other hand, focuses on the characteristics of the movies themselves. It looks at the attributes of each movie, such as genre, actors, director, plot keywords, and more. Then, it matches these attributes with the user’s preferences. For example, if a user has previously enjoyed action movies starring a specific actor, the content-based filtering system will recommend similar action movies featuring that actor. Its like having a personal movie critic who knows your favorite genres, actors, and themes and suggests movies that fit your tastes based on those preferences.')
