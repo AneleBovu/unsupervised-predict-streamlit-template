@@ -99,7 +99,7 @@ def main():
     selected = option_menu(
         menu_title=None,  # required
         options=["Recom-Engine","EDA","Solution Overview","About Us"],  # required
-        icons=["bag-heart","stack","easel","info-lg"],  
+        icons=["bag-heart","stack","easel","info-square"],  
         menu_icon="cast",  
         default_index=0, 
         orientation="horizontal",
@@ -167,14 +167,23 @@ def main():
     if selected == "EDA":
 
         st.title("Exploritory Data Analysis")
-        st.image("resources/imgs/moviespergenre.png", width=150)
 
-        st.image("resources/imgs/numberofmovies per director.png", width=150)
+        st.image("resources/imgs/moviespergenre.png", width=500)
 
-        st.image("resources/imgs/numberofmovies per director.png", width=150)
-      
+        st.image("resources/imgs/numberofmovies per director.png", width=500)
 
-                    
+        st.image("resources/imgs/numberofmovies per director.png", width=500)
+
+        st.image("resources/imgs/top10users.png", width=500)
+
+        st.image("resources/imgs/usersvsratingswithoutol.png", width=500)
+
+        st.image("resources/imgs/noofratingsvsratings.png", width=500)
+
+        st.image("resources/imgs/ratingdistribution.png", width=500)
+        
+
+                
     # -------------------------------------------------------------------
 
     # ------------- SAFE FOR ALTERING/EXTENSION -------------------
