@@ -58,8 +58,9 @@ with st.spinner('# CineSage Loading...'):
 
 #trailer
 def create_imdb_link(movie_imdbId):
-    imdb_url = f"https://www.imdb.com/title/tt00{movie_imdbId}/"
-    return imdb_url
+    imdb_url1 = f"https://www.imdb.com/title/tt00{movie_imdbId}/"
+    imdb_url2 = f"https://www.imdb.com/title/tt0{movie_imdbId}/"
+    return [imdb_url1, imdb_url2]
 
 #poster
 def fetch_poster(movie_id):
