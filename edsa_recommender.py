@@ -57,33 +57,9 @@ with st.spinner('# CineSage Loading...'):
     time.sleep(6) 
 
 #trailer
-def get_movie_trailer(movie_name):
-    # Set up YouTube Data API client
-    api_service_name = "youtube"
-    api_version = "v3"
-    api_key = "AIzaSyCxeFJnqlUpLw8vRA1jXLbq-a9FHhsOMi0"  # Replace with your own API key
-    youtube = googleapiclient.discovery.build(api_service_name, api_version, developerKey=api_key)
-
-    # Search for movie trailers
-    request = youtube.search().list(
-        q=movie_name + " trailer",
-        part="snippet",
-        maxResults=1,
-        type="video"
-    )
-    response = request.execute()
-
-    # Extract trailer video ID
-    if 'items' in response:
-        items = response['items']
-        if items:
-            trailer_id = items[0]['id']['videoId']
-            trailer_url = f"https://www.youtube.com/watch?v={trailer_id}"
-            return trailer_url
-        else:
-            return "No trailer found."
-    else:
-        return "Error fetching data."
+def create_imdb_link(movie_imdbId):
+    imdb_url = f"https://www.imdb.com/title/tt0{movie_imdbId}/"
+    return imdb_url
 
 #poster
 def fetch_poster(movie_id):
@@ -171,11 +147,9 @@ def main():
                     st.image(poster_url, width=150)
 
                     # Display trailer link
-                    trailer_url = get_movie_trailer(movie_name)
-                    if trailer_url != "No trailer found.":
-                       st.markdown(f"Trailer URL: [{movie_name} Trailer]({trailer_url})")
-                    else:
-                      st.write("Trailer not available.")
+                    movie_imdbId = movie_df.loc[movie_df['title'] == movie_name, 'imdbId'].values[0]
+                    trailer_url = create_imdb_link(movie_imdbId)
+                    st.markdown(f"Trailer URL: [{movie_name} Trailer]({trailer_url})")
                     
 
             except:
