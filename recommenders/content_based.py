@@ -34,42 +34,10 @@ import numpy as np
 from sklearn.metrics.pairwise import cosine_similarity
 from sklearn.feature_extraction.text import CountVectorizer
 
-#libraries
-import googleapiclient.discovery
-
 # Importing data
 movies = pd.read_csv('resources/data/movies.csv', sep = ',')
 ratings = pd.read_csv('resources/data/ratings.csv')
 movies.dropna(inplace=True)
-
-#trailer
-def get_movie_trailer(movie_name):
-    # Set up YouTube Data API client
-    api_service_name = "youtube"
-    api_version = "v3"
-    api_key = "AIzaSyCxeFJnqlUpLw8vRA1jXLbq-a9FHhsOMi0"  # Replace with your own API key
-    youtube = googleapiclient.discovery.build(api_service_name, api_version, developerKey=api_key)
-
-    # Search for movie trailers
-    request = youtube.search().list(
-        q=movie_name + " trailer",
-        part="snippet",
-        maxResults=1,
-        type="video"
-    )
-    response = request.execute()
-
-    # Extract trailer video ID
-    if 'items' in response:
-        items = response['items']
-        if items:
-            trailer_id = items[0]['id']['videoId']
-            trailer_url = f"https://www.youtube.com/watch?v={trailer_id}"
-            return trailer_url
-        else:
-            return "No trailer found."
-    else:
-        return "Error fetching data."
 
 def data_preprocessing(subset_size):
     """Prepare data for use within Content filtering algorithm.
@@ -141,15 +109,4 @@ def content_model(movie_list,top_n=10):
     top_indexes = np.setdiff1d(top_50_indexes,[idx_1,idx_2,idx_3])
     for i in top_indexes[:top_n]:
         recommended_movies.append(list(movies['title'])[i])
-
-    for movie_title in recommended_movies:
-        trailer_url = get_movie_trailer(movie_title)
-        if trailer_url != "No trailer found.":
-            print(f"Trailer URL: {movie_title} Trailer - {trailer_url}")
-        else:
-            print(f"No trailer available for {movie_title}.")
     return recommended_movies
-
-
-    
-

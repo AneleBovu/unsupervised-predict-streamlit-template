@@ -170,15 +170,11 @@ def main():
                     poster_url = fetch_poster(movie_id)
                     st.image(poster_url, width=150)
 
-                for i, movie_name in enumerate(top_recommendations):
-                    st.subheader(str(i+1) + '. ' + movie_name)
-
                     # Display trailer link
-                    trailer_url = get_movie_trailer(movie_name)
-                    if trailer_url != "No trailer found.":
-                       st.markdown(f"Trailer URL: [{movie_name} Trailer]({trailer_url})")
-                    else:
-                       st.write("Trailer not available.")
+                    ##if trailer_url != "No trailer found.":
+                       #st.markdown(f"Trailer URL: [{movie_name} Trailer]({trailer_url})")
+                    #else:
+                     #  st.write("Trailer not available.")
                     
 
             except:
