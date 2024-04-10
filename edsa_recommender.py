@@ -190,7 +190,7 @@ def main():
 
         st.image("resources/imgs/top10users.png", width=600)
         st.image("resources/imgs/usersvsratingswithoutol.png", width=600)
-        text3="""Secondly, we have the top 10 users by number of ratings. In the histogram above we can see that UserID number 72315 has the majority of ratings. 
+        text3="""➢Secondly, we have the top 10 users by number of ratings. In the histogram above we can see that UserID number 72315 has the majority of ratings. 
         The gap between the first user and other users can affect the accuracy of algorithms such as KNN clustering because they are sensitive to outliers. 
         So to reduce outliers we standardize the data to produce the plot below. From the histogram below we can see that we no longer have outliers anymore. 
         This standardized data is the one we are going to use for our algorithms and models
