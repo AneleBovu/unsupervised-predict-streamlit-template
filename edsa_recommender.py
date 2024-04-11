@@ -49,11 +49,23 @@ def create_imdb_link_2(movie_imdbId):
 #poster
 def fetch_poster(movie_id):
     url = "https://api.themoviedb.org/3/movie/{}?api_key=c7ec19ffdd3279641fb606d19ceb9bb1&language=en-US".format(movie_id)
-    data=requests.get(url)
-    data=data.json()
-    poster_path = data['poster_path']
-    full_path = "https://image.tmdb.org/t/p/w500/"+poster_path
-    return full_path
+    
+    try:
+        response = requests.get(url)
+        response.raise_for_status()  # Raise an exception for 4XX or 5XX errors
+        data = response.json()
+        
+        if 'poster_path' in data and data['poster_path']:
+            poster_path = data['poster_path']
+            full_path = "https://image.tmdb.org/t/p/w500/" + poster_path
+            return full_path
+        else:
+            return None  # Return None if poster_path is missing or empty
+    
+    except requests.exceptions.RequestException as e:
+        st.error("Error fetching data. Please try again.")
+        return None
+    
 #data
 df_links.dropna(subset=['tmdbId'], inplace=True)
 df_links['tmdbId'] = df_links['tmdbId'].astype(int)
