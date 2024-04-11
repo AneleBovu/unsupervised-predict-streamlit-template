@@ -1,94 +1,64 @@
 """
-
     Streamlit webserver-based Recommender Engine.
-
     Author: Explore Data Science Academy.
-
     Note:
     ---------------------------------------------------------------------
     Please follow the instructions provided within the README.md file
     located within the root of this repository for guidance on how to use
     this script correctly.
-
     NB: !! Do not remove/modify the code delimited by dashes !!
-
     This application is intended to be partly marked in an automated manner.
     Altering delimited code may result in a mark of 0.
     ---------------------------------------------------------------------
-
     Description: This file is used to launch a minimal streamlit web
 	application. You are expected to extend certain aspects of this script
     and its dependencies as part of your predict project.
-
 	For further help with the Streamlit framework, see:
-
 	https://docs.streamlit.io/en/latest/
-
 """
 # Streamlit dependencies
 import streamlit as st
 from streamlit_option_menu import option_menu
 import time
-
 # Data handling dependencies
 import pandas as pd
 import requests
 import base64
 import os
-
 # Custom Libraries
-
 from utils.data_loader import load_movie_titles
 from recommenders.collaborative_based import collab_model
 from recommenders.content_based import content_model
-
 #libraries
 import googleapiclient.discovery
-
 # Data Loading
 df_links = pd.read_csv('resources/data/links.csv')
-df_max = pd.read_csv('resources/data/links_with_media.csv')
 title_list = load_movie_titles('resources/data/movies.csv')
 movies_df =  pd.read_csv('resources/data/movies.csv', index_col='movieId')
 movies = movies_df.dropna()
-
 #Loading page
 with st.spinner('# CineSage Loading...'):
     # Simulate a long computation
     time.sleep(6) 
-
 #trailer
-def get_link(movie_id):
-    
-    # Search for the movieId in the DataFrame
-    row = df_max[df_max['movieId'] == movie_id]
-    
-    if not row.empty:
-        # Extract link from the found row
-        link = row['link'].iloc[0]
-        return link
-    else:
-        # Return None if movieId is not found
-        return None
+def create_imdb_link_1(movie_imdbId):
+    imdb_url1 = f"https://www.imdb.com/title/tt00{movie_imdbId}/"
+    return imdb_url1
+def create_imdb_link_2(movie_imdbId):
+    imdb_url2 = f"https://www.imdb.com/title/tt0{movie_imdbId}/"
+    return imdb_url2
 #poster
-def get_images(movie_id):
-
-    # Search for the movieId in the DataFrame
-    row = df_max[df_max['movieId'] == movie_id]
-    
-    if not row.empty:
-        # Extract images URL from the found row
-        images_url = row['images'].iloc[0]
-        return images_url
-    else:
-        # Return None if movieId is not found
-        return None
-
+def fetch_poster(movie_id):
+    url = "https://api.themoviedb.org/3/movie/{}?api_key=c7ec19ffdd3279641fb606d19ceb9bb1&language=en-US".format(movie_id)
+    data=requests.get(url)
+    data=data.json()
+    poster_path = data['poster_path']
+    full_path = "https://image.tmdb.org/t/p/w500/"+poster_path
+    return full_path
 #data
 df_links.dropna(subset=['tmdbId'], inplace=True)
 df_links['tmdbId'] = df_links['tmdbId'].astype(int)
 movie_df = pd.merge(movies_df, df_links, on='movieId', how='inner')
-
 def add_bg_from_local(image_file):
     with open(image_file, "rb") as image_file:
         encoded_string = base64.b64encode(image_file.read())
@@ -104,7 +74,6 @@ def add_bg_from_local(image_file):
     unsafe_allow_html=True
     )
 add_bg_from_local('resources/imgs/back.jpg')  
-
 def main():
     selected = option_menu(
         menu_title=None,  # required
@@ -123,12 +92,14 @@ def main():
         # Header contents
         st.image("resources/imgs/engine.jpg", width=700)
         
-       
+        columns = st.columns(len([299536, 429422, 240, 155, 572154]))
+        for i, movie_id in enumerate([299536, 429422, 240, 155, 572154]):
+            poster_url = fetch_poster(movie_id)
+            columns[i].image(poster_url, width=150)
             # Recommender System algorithm selection
         sys = st.radio("Select an algorithm",
                        ('Content Based Filtering',
                         'Collaborative Based Filtering'))
-
         # User-based preferences
         st.write('### Enter Your Three Favorite Movies')
         movie_1 = st.selectbox('Fisrt Option',title_list[14930:15200])
@@ -149,23 +120,21 @@ def main():
                     
                 # Display recommended movies with posters and trailer links
                 st.title("We think you'll like:")
-
                 text = """Try URL 1 or URL 2"""
                 st.info(text)
                 for i, movie_name in enumerate(top_recommendations):
                     st.subheader(str(i+1) + '. ' + movie_name)
-                    #movieid
-                    movie_id = movie_df.loc[movie_df['title'] == movie_name, 'movieId'].values[0]
-
                     # Display movie poster
-                    poster_url = get_images(movie_id)
+                    movie_id = movie_df.loc[movie_df['title'] == movie_name, 'tmdbId'].values[0]
+                    poster_url = fetch_poster(movie_id)
                     st.image(poster_url, width=150)
-
                     # Display trailer link
-                    trailer_url = get_link(movie_id)
-                    st.markdown(f"imdbId URL: [{movie_name} imdbId]({trailer_url})")
+                    movie_imdbId = movie_df.loc[movie_df['title'] == movie_name, 'imdbId'].values[0]
+                    trailer_url1 = create_imdb_link_1(movie_imdbId)
+                    trailer_url2 = create_imdb_link_2(movie_imdbId)
+                    st.markdown(f"imdbId URL 1: [{movie_name} imdbId]({trailer_url1})")
+                    st.markdown(f"imdbId URL 2: [{movie_name} imdbId]({trailer_url2})")
                     
-
             except:
                 st.error("Oops! Looks like this algorithm doesn't work. We'll need to fix it!")
 
