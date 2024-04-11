@@ -25,10 +25,10 @@ import pandas as pd
 import base64
 import os
 # Custom Libraries
+from fetch_poster import fetch_poster
 from utils.data_loader import load_movie_titles
 from recommenders.collaborative_based import collab_model
 from recommenders.content_based import content_model
-from recommenders.poster import fetch_poster
 #libraries
 import googleapiclient.discovery
 # Data Loading
@@ -47,7 +47,7 @@ def create_imdb_link_1(movie_imdbId):
 def create_imdb_link_2(movie_imdbId):
     imdb_url2 = f"https://www.imdb.com/title/tt0{movie_imdbId}/"
     return imdb_url2
-
+#poster
 #data
 df_links.dropna(subset=['tmdbId'], inplace=True)
 df_links['tmdbId'] = df_links['tmdbId'].astype(int)
@@ -122,7 +122,7 @@ def main():
                     movie_id = movie_df.loc[movie_df['title'] == movie_name, 'tmdbId'].values[0]
                     poster_url = fetch_poster(movie_id)
                     st.image(poster_url, width=150)
-
+                    
                     # Display trailer link
                     movie_imdbId = movie_df.loc[movie_df['title'] == movie_name, 'imdbId'].values[0]
                     trailer_url1 = create_imdb_link_1(movie_imdbId)
