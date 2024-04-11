@@ -29,8 +29,7 @@ import os
 from utils.data_loader import load_movie_titles
 from recommenders.collaborative_based import collab_model
 from recommenders.content_based import content_model
-#libraries
-import googleapiclient.discovery
+
 # Data Loading
 df_links = pd.read_csv('resources/data/links.csv')
 title_list = load_movie_titles('resources/data/movies.csv')
