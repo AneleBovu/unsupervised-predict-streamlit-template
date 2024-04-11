@@ -47,6 +47,7 @@ import googleapiclient.discovery
 
 # Data Loading
 df_links = pd.read_csv('resources/data/links.csv')
+df_max = pd.read_csv('resources/data/links_with_media.csv')
 title_list = load_movie_titles('resources/data/movies.csv')
 movies_df =  pd.read_csv('resources/data/movies.csv', index_col='movieId')
 movies = movies_df.dropna()
@@ -57,22 +58,31 @@ with st.spinner('# CineSage Loading...'):
     time.sleep(6) 
 
 #trailer
-def create_imdb_link_1(movie_imdbId):
-    imdb_url1 = f"https://www.imdb.com/title/tt00{movie_imdbId}/"
-    return imdb_url1
-
-def create_imdb_link_2(movie_imdbId):
-    imdb_url2 = f"https://www.imdb.com/title/tt0{movie_imdbId}/"
-    return imdb_url2
-
+def get_link(movie_id):
+    
+    # Search for the movieId in the DataFrame
+    row = df_max[df_max['movieId'] == movie_id]
+    
+    if not row.empty:
+        # Extract link from the found row
+        link = row['link'].iloc[0]
+        return link
+    else:
+        # Return None if movieId is not found
+        return None
 #poster
-def fetch_poster(movie_id):
-    url = "https://api.themoviedb.org/3/movie/{}?api_key=c7ec19ffdd3279641fb606d19ceb9bb1&language=en-US".format(movie_id)
-    data=requests.get(url)
-    data=data.json()
-    poster_path = data['poster_path']
-    full_path = "https://image.tmdb.org/t/p/w500/"+poster_path
-    return full_path
+def get_images(movie_id):
+
+    # Search for the movieId in the DataFrame
+    row = df_max[df_max['movieId'] == movie_id]
+    
+    if not row.empty:
+        # Extract images URL from the found row
+        images_url = row['images'].iloc[0]
+        return images_url
+    else:
+        # Return None if movieId is not found
+        return None
 
 #data
 df_links.dropna(subset=['tmdbId'], inplace=True)
@@ -115,7 +125,7 @@ def main():
         
         columns = st.columns(len([299536, 429422, 240, 155, 572154]))
         for i, movie_id in enumerate([299536, 429422, 240, 155, 572154]):
-            poster_url = fetch_poster(movie_id)
+            poster_url = get_images(movie_id)
             columns[i].image(poster_url, width=150)
             # Recommender System algorithm selection
         sys = st.radio("Select an algorithm",
@@ -147,18 +157,16 @@ def main():
                 st.info(text)
                 for i, movie_name in enumerate(top_recommendations):
                     st.subheader(str(i+1) + '. ' + movie_name)
+                    #movieid
+                    movie_id = movie_df.loc[movie_df['title'] == movie_name, 'movieId'].values[0]
 
                     # Display movie poster
-                    movie_id = movie_df.loc[movie_df['title'] == movie_name, 'tmdbId'].values[0]
-                    poster_url = fetch_poster(movie_id)
+                    poster_url = get_images(movie_id)
                     st.image(poster_url, width=150)
 
                     # Display trailer link
-                    movie_imdbId = movie_df.loc[movie_df['title'] == movie_name, 'imdbId'].values[0]
-                    trailer_url1 = create_imdb_link_1(movie_imdbId)
-                    trailer_url2 = create_imdb_link_2(movie_imdbId)
-                    st.markdown(f"imdbId URL 1: [{movie_name} imdbId]({trailer_url1})")
-                    st.markdown(f"imdbId URL 2: [{movie_name} imdbId]({trailer_url2})")
+                    trailer_url = get_link(movie_id)
+                    st.markdown(f"imdbId URL: [{movie_name} imdbId]({trailer_url})")
                     
 
             except:
