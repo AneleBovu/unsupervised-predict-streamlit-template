@@ -22,13 +22,13 @@ from streamlit_option_menu import option_menu
 import time
 # Data handling dependencies
 import pandas as pd
-import requests
 import base64
 import os
 # Custom Libraries
 from utils.data_loader import load_movie_titles
 from recommenders.collaborative_based import collab_model
 from recommenders.content_based import content_model
+from recommenders.poster import fetch_poster
 #libraries
 import googleapiclient.discovery
 # Data Loading
@@ -47,14 +47,7 @@ def create_imdb_link_1(movie_imdbId):
 def create_imdb_link_2(movie_imdbId):
     imdb_url2 = f"https://www.imdb.com/title/tt0{movie_imdbId}/"
     return imdb_url2
-#poster
-def fetch_poster(movie_id):
-    url = "https://api.themoviedb.org/3/movie/{}?api_key=c7ec19ffdd3279641fb606d19ceb9bb1&language=en-US".format(movie_id)
-    data=requests.get(url)
-    data=data.json()
-    poster_path = data['poster_path']
-    full_path = "https://image.tmdb.org/t/p/w500/"+poster_path
-    return full_path
+
 #data
 df_links.dropna(subset=['tmdbId'], inplace=True)
 df_links['tmdbId'] = df_links['tmdbId'].astype(int)
@@ -129,7 +122,7 @@ def main():
                     movie_id = movie_df.loc[movie_df['title'] == movie_name, 'tmdbId'].values[0]
                     poster_url = fetch_poster(movie_id)
                     st.image(poster_url, width=150)
-                    
+
                     # Display trailer link
                     movie_imdbId = movie_df.loc[movie_df['title'] == movie_name, 'imdbId'].values[0]
                     trailer_url1 = create_imdb_link_1(movie_imdbId)
