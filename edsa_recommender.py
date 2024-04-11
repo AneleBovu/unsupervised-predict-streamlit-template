@@ -123,10 +123,7 @@ def main():
         # Header contents
         st.image("resources/imgs/engine.jpg", width=700)
         
-        columns = st.columns(len([299536, 429422, 240, 155, 572154]))
-        for i, movie_id in enumerate([299536, 429422, 240, 155, 572154]):
-            poster_url = get_images(movie_id)
-            columns[i].image(poster_url, width=150)
+       
             # Recommender System algorithm selection
         sys = st.radio("Select an algorithm",
                        ('Content Based Filtering',
