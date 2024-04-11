@@ -126,9 +126,9 @@ def main():
                     st.subheader(str(i+1) + '. ' + movie_name)
 
                     # Display movie poster
-                    #movie_id = movie_df.loc[movie_df['title'] == movie_name, 'tmdbId'].values[0]
-                    #poster_url = fetch_poster(movie_id)
-                    #st.image(poster_url, width=150)
+                    movie_id = movie_df.loc[movie_df['title'] == movie_name, 'tmdbId'].values[0]
+                    poster_url = fetch_poster(movie_id)
+                    st.image(poster_url, width=150)
                     
                     # Display trailer link
                     movie_imdbId = movie_df.loc[movie_df['title'] == movie_name, 'imdbId'].values[0]
